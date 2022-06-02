@@ -13,55 +13,75 @@ window.addEventListener("load", () => {
         const fr = new FileReader();
         fr.readAsText(file);
         fr.onload = () => {
-            let p = textAnalyzer(fr.result);
-            console.log(p);
-            let table = document.getElementById("result");
-            for (let i = 0; i < p.length; i++) {
+            let result = textAnalyzer(fr.result);
+            console.log(result);
+            let div = document.getElementById("result");
+            let table = document.createElement("table");
+            let caption = document.createElement("caption");
+                caption.innerText = result[0].replace("[LINE] ", "");
+                table.appendChild(caption);
+            let h_tr = document.createElement("tr");
+                h_tr.className = "table-headers";
+            let th1 = document.createElement("th"); th1.innerText = "Names";
+            let th2 = document.createElement("th"); th2.innerHTML = "Message<br>(Text only)";
+            let th3 = document.createElement("th"); th3.innerText = "Stamp";
+            let th4 = document.createElement("th"); th4.innerText = "Photo";
+            let th5 = document.createElement("th"); th5.innerText = "Video";
+            let th6 = document.createElement("th"); th6.innerHTML = "Word<br>length";
+            let th7 = document.createElement("th"); th7.innerHTML = "length<br>per Msg.";
+                h_tr.appendChild(th1); h_tr.appendChild(th2); h_tr.appendChild(th3);
+                h_tr.appendChild(th4); h_tr.appendChild(th5); h_tr.appendChild(th6);
+                h_tr.appendChild(th7);
+                table.append(h_tr);
+            for (let i = 0; i < result[2].length; i++) {
                 let tr = document.createElement("tr");
                 let td = document.createElement("td");
-                    td.innerText = p[i].name;
+                    td.innerText = result[2][i].name;
                     tr.appendChild(td)
 
                     td = document.createElement("td");
-                    td.innerText = p[i].msg;
+                    td.innerText = result[2][i].msg;
                     tr.appendChild(td)
 
                     td = document.createElement("td");
-                    td.innerText = p[i].stamp;
+                    td.innerText = result[2][i].stamp;
                     tr.appendChild(td)
 
                     td = document.createElement("td");
-                    td.innerText = p[i].image;
+                    td.innerText = result[2][i].image;
                     tr.appendChild(td)
 
                     td = document.createElement("td");
-                    td.innerText = p[i].movie;
+                    td.innerText = result[2][i].movie;
                     tr.appendChild(td)
 
                     td = document.createElement("td");
-                    td.innerText = p[i].msglength;
+                    td.innerText = result[2][i].msglength;
+                    tr.appendChild(td)
+
+                    td = document.createElement("td");
+                    td.innerText = result[2][i].msglength / result[2][i].msg | 0;
                     tr.appendChild(td)
 
                     table.append(tr);
             }
+            div.appendChild(table);
         }
     });
 });
 
-
-
-const textAnalyzer = function (text) {
-    class Members {
-        constructor (name){
-            this.name = name;
-            this.msg = 0;
-            this.msglength = 0;
-            this.stamp = 0;
-            this.image = 0;
-            this.movie = 0;
-        }
+class Members {
+    constructor (name){
+        this.name = name;
+        this.msg = 0;
+        this.msglength = 0;
+        this.stamp = 0;
+        this.image = 0;
+        this.movie = 0;
     }
-    
+}
+
+const textAnalyzer = function (text) {    
     const person = new Array();
 
     const rowsArr = text.split("\n");
@@ -114,5 +134,5 @@ const textAnalyzer = function (text) {
         default:
             break;
     }
-    return person;
+    return new Array(header, savetime, person);
 }

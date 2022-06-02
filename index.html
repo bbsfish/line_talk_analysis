@@ -9,24 +9,67 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <language initial="ja" lang="ja,en"></language>
+<header>
+    <h1 class="header-logo">LINE TALK ANALYZER</h1>
+    <nav>
+        <ul>
+            <li class="h-items active"><a href="index.html">HOME</a></li>
+            <li class="h-items"><a href="guide.html">GUIDE</a></li>
+        </ul>
+    </nav>
+</header>
 <main>
-    <h2>Input file</h2>
+    <h2>Abstract</h2>
+    <p>
+        LINEのトーク履歴から、チャットグループ内での発言のデータを集めます。
+        トーク履歴をテキストで出力できるチャットであれば、基本使えます。
+        出力の仕方は<a href="guide.html">GUIDE</a>を参照してください。
+        出力したファイルをInputで選択すれば、
+        Resultに結果が出力されます。
+        なお、トーク履歴のファイルはすべてローカルで処理され、データがサーバに
+        送信・保存されることはありません。
+    </p>
+    <p>&lt;About column names&gt;</p>
+    <p>
+        Names:<br>&emsp;User Name.<br>
+        Message (Text only), Stamp, Photo, Video:<br>&emsp;ユーザに送信されたメッセージ等の数.<br>
+        Word length:<br>&emsp;ユーザが送信したメッセージの文字数の合計.<br>
+        length per Msg.:<br>&emsp;ユーザの１メッセージあたりの文字数.<br>&emsp;(計算式)=[Word length] ÷ [Message (Text only)]
+    </p>
+    <h2>Tool</h2>
+    <h3>Input file</h3>
     <input type="file" id="file_input">
-    <h2>Result</h2>
-    <div class="result-fields">
-        <table id="result">
-            <tr>
-                <th>Name</th>
+    <h3>Result</h3>
+    <div class="result-fields" id="result">
+        <!-- <table>
+            <caption>XYB LINE TALK</caption>
+            <tr class="table-headers">
+                <th>Names</th>
                 <th>Message<br>(Text only)</th>
                 <th>Stamp</th>
                 <th>Photo</th>
                 <th>Video</th>
                 <th>Word<br>length</th>
+                <th>length<br>per Msg.</th>
             </tr>
             <tr>
-
+                <td>Person1</td>
+                <td>500</td>
+                <td>500</td>
+                <td>500</td>
+                <td>500</td>
+                <td>500</td>
             </tr>
-        </table>
+            <tr>
+                <td>Person2</td>
+                <td>500</td>
+                <td>500</td>
+                <td>500</td>
+                <td>500</td>
+                <td>500</td>
+            </tr>
+        </table> -->
     </div>
 </main>
 </body>
