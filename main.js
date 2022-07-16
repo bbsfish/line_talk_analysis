@@ -13,7 +13,7 @@ window.addEventListener("load", () => {
         const fr = new FileReader();
         fr.readAsText(file);
         fr.onload = () => {
-            let result = textAnalyzer(fr.result);
+            let result = textAnalyzer(fr.result); // return new Array(header, savetime, person, relations);
             console.log(result);
             let div = document.getElementById("result");
             let table = document.createElement("table");
@@ -81,8 +81,20 @@ class Members {
     }
 }
 
+class Relationships {
+    constructor (m1, m2){ // from man1 to man2
+        this.man1 = m1;
+        this.man2 = m2;
+        this.counter = 1;
+    }
+    talked(){
+        this.counter++;
+    }
+}
+
 const textAnalyzer = function (text) {    
     const person = new Array();
+    const relations = new Array();
 
     const rowsArr = text.split("\n");
     const header = rowsArr[0];
@@ -92,6 +104,7 @@ const textAnalyzer = function (text) {
     // txtArr = text.split(/20\d{2}\/\d{1,2}\/\d{1,2}\([月火水木金土日]\)\n\d{1,2}:\d{1,2}/);
     // txtArr = text.split(/\d{1,2}:\d{1,2}\t.+\t/);
     let txtArr = talk_content.split(/\d{1,2}:\d{1,2}\t/);
+    let lastperson = null;
 
     switch (lang) {
         case "ja":
@@ -115,6 +128,7 @@ const textAnalyzer = function (text) {
                             person.push(p);
                         }
 
+                        // set args
                         let trimed_msg = name_and_msg[1].trim();
                         if (trimed_msg == "[スタンプ]") {
                             person[known_flag].stamp++;
@@ -126,6 +140,27 @@ const textAnalyzer = function (text) {
                             person[known_flag].msg++;
                             person[known_flag].msglength += name_and_msg[1].length;
                         }
+
+                        // set relations
+                        if (lastperson && lastperson != name_and_msg[0]) {
+                            let flag = false;
+                            for (let i = 0; i < relations.length; i++) {
+                                if ( relations[i].man1 == lastperson
+                                    && relations[i].man2 == name_and_msg[0]
+                                ){
+                                    flag = true;
+                                    relations[i].talked();
+                                    break;
+                                }
+                            }
+                            if (!flag) {
+                                let r = new Relationships(lastperson, name_and_msg[0]);
+                                relations.push(r);
+                            }
+                        }
+
+                        // set lastperson
+                        lastperson = name_and_msg[0];
                     }
                 }
             });            
@@ -134,5 +169,5 @@ const textAnalyzer = function (text) {
         default:
             break;
     }
-    return new Array(header, savetime, person);
+    return new Array(header, savetime, person, relations);
 }
